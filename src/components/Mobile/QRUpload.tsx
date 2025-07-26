@@ -223,9 +223,24 @@ export function QRUpload() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-xl font-semibold text-gray-900">Mobile QR Upload</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              Generate QR codes for instant mobile document upload with real-time sync
-            </p>
+            <div className="flex items-center space-x-2 mt-1">
+              <p className="text-sm text-gray-600">
+                Generate QR codes for instant mobile document upload with real-time sync
+              </p>
+              <div className="flex items-center space-x-1">
+                <div className={`w-2 h-2 rounded-full ${
+                  connectionStatus === 'connected' ? 'bg-green-500' : 
+                  connectionStatus === 'connecting' ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
+                <span className={`text-xs font-medium ${
+                  connectionStatus === 'connected' ? 'text-green-600' : 
+                  connectionStatus === 'connecting' ? 'text-yellow-600' : 'text-red-600'
+                }`}>
+                  {connectionStatus === 'connected' ? 'Real-time Active' : 
+                   connectionStatus === 'connecting' ? 'Connecting...' : 'Offline Mode'}
+                </span>
+              </div>
+            </div>
           </div>
           <button
             onClick={generateUploadQR}
