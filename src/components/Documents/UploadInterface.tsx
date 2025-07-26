@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { Upload, QrCode, Camera, FileImage, Loader2, AlertCircle, CheckCircle, Cpu, Database, Image as ImageIcon, Box, Zap, Eye, Edit3, Save, X, Info, TestTube, FolderSync as Sync, FileText, Stamp, PenTool, Shield } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useDocuments } from '../../contexts/DocumentContext';
-import { azureAIService, AzureAIResult } from '../../services/azureAIService';
 import { openAIService, OpenAIAnalysisResult } from '../../services/openAIService';
 import { ollamaService, OllamaTextExtractionResult } from '../../services/ollamaService';
 import { temporaryStorageService, TemporaryDocument } from '../../services/temporaryStorageService';
