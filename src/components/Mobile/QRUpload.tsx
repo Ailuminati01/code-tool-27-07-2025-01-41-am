@@ -10,15 +10,25 @@ export function QRUpload() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<MobileUploadFile[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'disconnected' | 'error'>('connecting');
 
   useEffect(() => {
     if (user) {
       loadActiveQRCodes();
       loadUploadedFiles();
       
-      // Auto-refresh uploaded files every 10 seconds
-      const interval = setInterval(loadUploadedFiles, 10000);
-      return () => clearInterval(interval);
+      // Auto-refresh uploaded files every 5 seconds (reduced due to WebSocket)
+      const interval = setInterval(loadUploadedFiles, 5000);
+      
+      // Check WebSocket connection status
+      const statusInterval = setInterval(() => {
+        setConnectionStatus(mobileUploadService.getConnectionStatus());
+      }, 2000);
+      
+      return () => {
+        clearInterval(interval);
+        clearInterval(statusInterval);
+      };
     }
   }, [user]);
 
