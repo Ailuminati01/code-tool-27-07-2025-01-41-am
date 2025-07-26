@@ -391,10 +391,22 @@ export function StampSignatureAnalyzer() {
               {analysisResult.MatchedStampType && (
                 <p>• Matched Stamp Type: {analysisResult.MatchedStampType}</p>
               )}
+              {analysisResult.PersonName && (
+                <p>• Signing Authority: {analysisResult.PersonName}</p>
+              )}
+              {analysisResult.Date && (
+                <p>• Document Date: {analysisResult.Date}</p>
+              )}
+              {analysisResult.Stamp.ExtractedText && (
+                <p>• Stamp Text: {analysisResult.Stamp.ExtractedText}</p>
+              )}
               <p className="text-xs text-blue-600 mt-2">
                 This document {analysisResult.Stamp.Status === 'Present' && analysisResult.Signature.Status === 'Present' && analysisResult.StampValidation === 'Y' 
                   ? 'has valid stamps and signatures' 
                   : 'may require additional verification'}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Processing Time: {analysisResult.ProcessingTime}ms | Powered by Ollama Gemma3
               </p>
             </div>
           </div>
