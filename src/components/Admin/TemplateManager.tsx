@@ -437,7 +437,7 @@ export function TemplateManager() {
           {/* Template List */}
           <div className="space-y-3">
             <h3 className="text-lg font-medium text-gray-900">Templates ({templates.length})</h3>
-            <div className="max-h-96 overflow-y-auto space-y-3">
+            <div className="max-h-96 overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
               {templates.map((template) => (
                 <div
                   key={template.id}
