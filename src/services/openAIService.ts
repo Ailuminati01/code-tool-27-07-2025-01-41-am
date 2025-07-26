@@ -266,7 +266,7 @@ Respond with valid JSON only:
           model: 'gpt-4o-mini',
           messages: [{
             role: 'system',
-            content: 'You are an expert data extraction specialist. Respond only with valid JSON. Do not include any explanatory text outside the JSON.'
+            content: 'You are an expert data extraction specialist for Andhra Pradesh Police Department documents. Extract information precisely from police documents including leave letters, punishment orders, awards, and official correspondence. Focus on accuracy and proper field mapping. Respond only with valid JSON. Do not include any explanatory text outside the JSON.'
           }, {
             role: 'user',
             content: prompt
