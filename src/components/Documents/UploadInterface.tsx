@@ -425,16 +425,16 @@ export function UploadInterface() {
           },
           qualityMetrics: {
             overallQuality: selectedTempDoc.confidence,
-            textClarity: selectedTempDoc.azureAIResult?.confidence || selectedTempDoc.confidence,
+            textClarity: selectedTempDoc.ollamaResult?.confidence || selectedTempDoc.confidence,
             imageQuality: 0.8,
             layoutComplexity: 0.5,
-            ocrConfidence: selectedTempDoc.azureAIResult?.confidence || selectedTempDoc.confidence
+            ocrConfidence: selectedTempDoc.ollamaResult?.confidence || selectedTempDoc.confidence
           }
         },
         metadata: {
           processingMethod: 'ollama-openai-template-mapped',
           layout: [],
-          tables: selectedTempDoc.azureAIResult?.tables || [],
+          tables: selectedTempDoc.ollamaResult?.tables || [],
           documentMetadata: {
             templateMatched: selectedTempDoc.suggestedTemplate?.name,
             templateConfidence: selectedTempDoc.confidence,
