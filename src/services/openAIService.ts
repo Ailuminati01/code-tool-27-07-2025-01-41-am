@@ -157,7 +157,7 @@ Respond with valid JSON only:
           model: 'gpt-4o-mini',
           messages: [{
             role: 'system',
-            content: 'You are an expert document classifier. Respond only with valid JSON. Do not include any explanatory text outside the JSON.'
+            content: 'You are an expert document classifier for Andhra Pradesh Police Department. Analyze police documents and classify them accurately based on content, purpose, and official indicators. Respond only with valid JSON. Do not include any explanatory text outside the JSON.'
           }, {
             role: 'user',
             content: prompt
