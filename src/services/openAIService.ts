@@ -114,19 +114,37 @@ class OpenAIService {
         description: this.getTemplateDescription(template)
       }));
 
-      const prompt = `Analyze the following document text and determine which template it best matches.
+      const prompt = `You are an expert document classifier and template matcher for Andhra Pradesh Police Department documents. Your task is to analyze the document text and find the BEST matching template from the provided list.
 
-DOCUMENT TEXT:
-${text.substring(0, 1000)}
+DOCUMENT TEXT TO ANALYZE:
+${text.substring(0, 1500)}
 
 AVAILABLE TEMPLATES:
 ${JSON.stringify(templateDescriptions, null, 2)}
+
+CLASSIFICATION INSTRUCTIONS:
+1. Read the document text carefully and identify key elements like:
+   - Document type (leave letter, punishment, reward, etc.)
+   - Official stamps or seals mentioned
+   - Department or office names
+   - Field types present (dates, names, stations, etc.)
+
+2. Match against available templates by:
+   - Comparing document content with template categories
+   - Looking for field types that match template requirements
+   - Considering the purpose and context of the document
+
+3. Assign confidence based on:
+   - High (0.9+): Perfect match with clear indicators
+   - Medium (0.7-0.9): Good match with most indicators present  
+   - Low (0.5-0.7): Partial match or uncertain
+   - Very Low (<0.5): Poor match or unable to determine
 
 Respond with valid JSON only:
 {
   "bestTemplateId": "exact template id from the list above",
   "confidence": 0.85,
-  "reasoning": "detailed explanation of why this template was chosen"
+  "reasoning": "detailed explanation of why this template was chosen, mentioning specific text elements that led to this decision"
 }`;
 
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
