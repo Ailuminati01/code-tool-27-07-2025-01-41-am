@@ -47,13 +47,12 @@ export function UploadInterface() {
 
   const checkServiceHealth = async () => {
     try {
-      const azureHealth = await azureAIService.checkServiceHealth();
       const openAIHealth = await openAIService.checkServiceHealth();
       const ollamaHealth = await ollamaService.checkServiceHealth();
       const supabaseHealthCheck = await supabaseService.checkConnection();
       const stampServiceHealth = await stampSignatureService.checkServiceHealth();
       
-      setAzureServiceHealth(azureHealth);
+      setAzureServiceHealth(null); // Azure service not used anymore
       setOpenAIServiceHealth(openAIHealth);
       setOllamaServiceHealth(ollamaHealth);
       setSupabaseHealth(supabaseHealthCheck);
