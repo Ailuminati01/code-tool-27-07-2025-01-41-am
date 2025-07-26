@@ -596,7 +596,7 @@ export function TemplateManager() {
                         </button>
                       </div>
 
-                      <div className="space-y-3 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2">
+                      <div className="space-y-3 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2 stable-scroll">
                         {editingTemplate.template.map((field, index) => (
                           <div key={field.id} className="border border-gray-200 rounded-lg p-4">
                             <div className="grid grid-cols-12 gap-3 items-end">
