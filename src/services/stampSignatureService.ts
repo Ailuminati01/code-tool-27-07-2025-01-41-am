@@ -397,5 +397,4 @@ Be extremely thorough and accurate. Look for faint stamps, partial stamps, and h
 }
 
 export const stampSignatureService = new StampSignatureService();
-export const stampSignatureService = new StampSignatureService();
 export type { StampSignatureAnalysisResult };
