@@ -206,20 +206,42 @@ Respond with valid JSON only:
         options: field.options || []
       }));
 
-      const prompt = `Extract data from the document text using the specified template.
+      const prompt = `You are an expert data extraction specialist for Andhra Pradesh Police Department documents. Extract data from the document text using the specified template with extreme precision.
 
 DOCUMENT TEXT:
-${text.substring(0, 1500)}
+${text.substring(0, 2000)}
 
-TEMPLATE: ${template.name}
-TEMPLATE FIELDS:
+TARGET TEMPLATE: ${template.name}
+CATEGORY: ${template.category}
+
+TEMPLATE FIELDS TO EXTRACT:
 ${JSON.stringify(templateFields, null, 2)}
 
-Extract data for every field. Use exact field IDs. Respond with valid JSON only:
+EXTRACTION INSTRUCTIONS:
+1. For each field, extract the most relevant information from the document text
+2. Match field labels with document content (e.g., "Officer Name" should extract actual officer names)
+3. For dates: Extract in DD/MM/YYYY or DD-MM-YYYY format if found
+4. For names: Extract full names of persons, officers, or authorities
+5. For stations/departments: Extract official names of police stations or departments
+6. For select fields: Choose the option that best matches the document content
+7. If no relevant information is found for a field, use null
+
+FIELD MATCHING STRATEGIES:
+- Look for exact matches first (e.g., "Name:" followed by text)
+- Check for contextual matches (e.g., officer names near "Sd/-" or signature areas)
+- Use positional clues (e.g., dates at top/bottom of document)
+- Consider document structure and official formatting
+
+CONFIDENCE SCORING:
+- Assign high confidence (0.9+) for exact matches
+- Medium confidence (0.7-0.8) for contextual matches
+- Lower confidence (0.5-0.6) for inferred or partial matches
+
+Respond with valid JSON only:
 {
   "documentType": "${template.name}",
   "confidence": 0.85,
-  "reasoning": "explanation of extraction process",
+  "reasoning": "detailed explanation of extraction process and field matching strategy",
   "extractedFields": {
     ${templateFields.map(f => `"${f.id}": "extracted value or null"`).join(',\n    ')}
   },
@@ -229,7 +251,7 @@ Extract data for every field. Use exact field IDs. Respond with valid JSON only:
       "fieldLabel": "field label", 
       "extractedValue": "value",
       "confidence": 0.8,
-      "source": "direct_match"
+      "source": "direct_match | pattern_match | context_match | ai_inference"
     }
   ]
 }`;
