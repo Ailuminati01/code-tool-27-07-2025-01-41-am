@@ -1,5 +1,6 @@
 import { supabaseService } from './supabaseService';
 import { securityService } from './securityService';
+import { webSocketService } from './webSocketService';
 
 export interface MobileUploadSession {
   id: string;
@@ -28,6 +29,26 @@ class MobileUploadService {
   private pendingFiles: Map<string, MobileUploadFile> = new Map();
   private listeners: Map<string, (files: MobileUploadFile[]) => void> = new Map();
 
+  constructor() {
+    // Setup WebSocket listeners for real-time updates
+    this.setupWebSocketListeners();
+  }
+
+  // Setup WebSocket event listeners
+  private setupWebSocketListeners() {
+    webSocketService.onFileUploaded((data) => {
+      // Handle real-time file upload notifications
+      console.log('Real-time file upload notification:', data);
+      this.notifyListeners(data.sessionId);
+    });
+
+    webSocketService.onFileProcessed((data) => {
+      // Handle real-time file processing notifications
+      console.log('Real-time file processing notification:', data);
+      this.notifyListeners(data.sessionId);
+    });
+  }
+
   // Generate a new upload session
   async createUploadSession(userId: string, expirationHours: number = 24): Promise<MobileUploadSession> {
     const sessionId = this.generateId('session');
@@ -45,13 +66,26 @@ class MobileUploadService {
 
     this.activeSessions.set(sessionId, session);
 
+    // Join WebSocket session for real-time updates
+    webSocketService.joinSession(sessionId);
+
+    // Notify WebSocket about session creation
+    webSocketService.notifyFileUploaded(sessionId, { 
+      type: 'session_created',
+      session: session 
+    });
+
     // Log session creation
     securityService.logAction(
       userId,
       'mobile_upload_session_created',
       'mobile_upload',
       'session_management',
-      { sessionId, expiresAt: session.expiresAt }
+      { 
+        sessionId, 
+        expiresAt: session.expiresAt,
+        realTimeEnabled: true 
+      }
     );
 
     return session;
@@ -71,7 +105,7 @@ class MobileUploadService {
     return session;
   }
 
-  // Upload file to session
+  // Upload file to session with real-time notification
   async uploadFile(sessionId: string, file: File): Promise<MobileUploadFile> {
     const session = this.getSession(sessionId);
     if (!session) {
@@ -103,7 +137,20 @@ class MobileUploadService {
       // Continue with local storage for now
     }
 
-    // Notify listeners (PC interface)
+    // Send real-time notification via WebSocket
+    webSocketService.notifyFileUploaded(sessionId, {
+      type: 'file_uploaded',
+      file: {
+        id: uploadFile.id,
+        fileName: uploadFile.fileName,
+        fileSize: uploadFile.fileSize,
+        fileType: uploadFile.fileType,
+        uploadedAt: uploadFile.uploadedAt,
+        status: uploadFile.status
+      }
+    });
+
+    // Notify listeners (PC interface) - both WebSocket and local
     this.notifyListeners(sessionId);
 
     // Log file upload
@@ -116,7 +163,8 @@ class MobileUploadService {
         fileId: uploadFile.id,
         fileName: uploadFile.fileName,
         fileSize: uploadFile.fileSize,
-        sessionId 
+        sessionId,
+        realTimeNotified: true
       }
     );
 
@@ -135,10 +183,13 @@ class MobileUploadService {
     return this.pendingFiles.get(fileId) || null;
   }
 
-  // Subscribe to file updates for a session
+  // Subscribe to file updates for a session with WebSocket integration
   subscribeToSession(sessionId: string, callback: (files: MobileUploadFile[]) => void): () => void {
     const listenerId = this.generateId('listener');
     this.listeners.set(listenerId, callback);
+
+    // Join WebSocket session for real-time updates
+    webSocketService.joinSession(sessionId);
 
     // Send initial files
     const files = this.getSessionFiles(sessionId);
@@ -147,10 +198,11 @@ class MobileUploadService {
     // Return unsubscribe function
     return () => {
       this.listeners.delete(listenerId);
+      webSocketService.leaveSession(sessionId);
     };
   }
 
-  // Mark file as processed
+  // Mark file as processed with real-time notification
   markFileAsProcessed(fileId: string): void {
     const file = this.pendingFiles.get(fileId);
     if (file) {
@@ -158,12 +210,26 @@ class MobileUploadService {
       file.processedAt = new Date().toISOString();
       this.pendingFiles.set(fileId, file);
       
+      // Send real-time notification
+      webSocketService.notifyFileProcessed(file.sessionId, {
+        type: 'file_processed',
+        file: {
+          id: file.id,
+          fileName: file.fileName,
+          status: file.status,
+          processedAt: file.processedAt
+        }
+      });
+      
       // Update in Supabase
       this.updateFileInSupabase(file);
+      
+      // Notify local listeners
+      this.notifyListeners(file.sessionId);
     }
   }
 
-  // Mark file as failed
+  // Mark file as failed with real-time notification
   markFileAsFailed(fileId: string, error: string): void {
     const file = this.pendingFiles.get(fileId);
     if (file) {
@@ -171,8 +237,22 @@ class MobileUploadService {
       file.processingError = error;
       this.pendingFiles.set(fileId, file);
       
+      // Send real-time notification
+      webSocketService.notifyFileProcessed(file.sessionId, {
+        type: 'file_failed',
+        file: {
+          id: file.id,
+          fileName: file.fileName,
+          status: file.status,
+          processingError: file.processingError
+        }
+      });
+      
       // Update in Supabase
       this.updateFileInSupabase(file);
+      
+      // Notify local listeners
+      this.notifyListeners(file.sessionId);
     }
   }
 
@@ -202,7 +282,7 @@ class MobileUploadService {
     console.log('Updating file in Supabase (simulated):', file.id);
   }
 
-  // Notify all listeners
+  // Notify all listeners with enhanced real-time support
   private notifyListeners(sessionId: string): void {
     const files = this.getSessionFiles(sessionId);
     this.listeners.forEach(callback => {
@@ -214,12 +294,15 @@ class MobileUploadService {
     });
   }
 
-  // Expire session
+  // Expire session with WebSocket cleanup
   private expireSession(sessionId: string): void {
     const session = this.activeSessions.get(sessionId);
     if (session) {
       session.status = 'expired';
       this.activeSessions.set(sessionId, session);
+      
+      // Leave WebSocket session
+      webSocketService.leaveSession(sessionId);
     }
   }
 
@@ -246,6 +329,11 @@ class MobileUploadService {
         this.pendingFiles.delete(fileId);
       }
     });
+  }
+
+  // Get WebSocket connection status for UI
+  getConnectionStatus(): 'connected' | 'connecting' | 'disconnected' | 'error' {
+    return webSocketService.getConnectionStatus();
   }
 }
 
