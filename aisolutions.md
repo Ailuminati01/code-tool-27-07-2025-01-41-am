@@ -155,11 +155,10 @@ The system follows a layered architecture with local processing capabilities:
 The system maintains a master list of 6 official stamps for the Andhra Pradesh Police Department:
 
 1. OFFICER COMMANDING 14th BN A.P.S.P. ANANTHAPURAMU
-2. STATE OFFICER TO ADGP APSP HEAD OFFICE MANGALAGIRI
-3. Inspector General of Police APSP Bns, Amaravathi
-4. Dy. Inspector General of Police-IV APSP Battalions, Mangalagiri
-5. Sd/- B. Sreenivasulu, IPS., Addl. Commissioner of Police, Vijayawada City
-6. Dr. SHANKHABRATA BAGCHI IPS., Addl. Director General of Police, APSP Battalions
+2. Sd/- B. Sreenivasulu, IPS., Addl. Commissioner of Police, Vijayawada City
+3. Dr. SHANKHABRATA BAGCHI IPS., Addl. Director General of Police, APSP Battalions
+4. STATE OFFICER TO ADGP APSP HEAD OFFICE MANGALAGIRI
+5. Inspector General of Police APSP Bns, Amaravathi
 
 Each stamp has associated keywords and RegEx patterns for validation.
 

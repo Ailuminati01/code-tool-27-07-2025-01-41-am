@@ -35,38 +35,32 @@ const OFFICIAL_STAMP_MASTER_LIST = [
   {
     id: 'stamp_1',
     name: 'OFFICER COMMANDING 14th BN A.P.S.P. ANANTHAPURAMU',
-    keywords: ['OFFICER COMMANDING', '14TH BN', 'A.P.S.P', 'ANANTHAPURAMU'],
+    keywords: ['OFFICER COMMANDING', '14TH BN', 'A.P.S.P', 'ANANTHAPURAMU', 'OC'],
     pattern: /OFFICER\s+COMMANDING.*14.*BN.*A\.P\.S\.P.*ANANTHAPURAMU/i
   },
   {
     id: 'stamp_2',
+    name: 'Sd/- B. Sreenivasulu, IPS., Addl. Commissioner of Police, Vijayawada City',
+    keywords: ['SD', 'SREENIVASULU', 'IPS', 'ADDL', 'COMMISSIONER', 'POLICE', 'VIJAYAWADA', 'CITY', 'HAC', 'IGP', 'APSP', 'BNS', 'MANGALAGIRI'],
+    pattern: /SD.*SREENIVASULU.*IPS.*ADDL.*COMMISSIONER.*POLICE.*VIJAYAWADA.*CITY/i
+  },
+  {
+    id: 'stamp_3',
+    name: 'Dr. SHANKHABRATA BAGCHI IPS., Addl. Director General of Police, APSP Battalions',
+    keywords: ['DR', 'SHANKHABRATA', 'BAGCHI', 'IPS', 'ADDL', 'DIRECTOR', 'GENERAL', 'POLICE', 'APSP', 'BATTALIONS', 'MANGALAGIRI'],
+    pattern: /DR.*SHANKHABRATA.*BAGCHI.*IPS.*ADDL.*DIRECTOR.*GENERAL.*POLICE.*APSP.*BATTALIONS/i
+  },
+  {
+    id: 'stamp_4',
     name: 'STATE OFFICER TO ADGP APSP HEAD OFFICE MANGALAGIRI',
     keywords: ['STATE OFFICER', 'ADGP', 'APSP', 'HEAD OFFICE', 'MANGALAGIRI'],
     pattern: /STATE\s+OFFICER.*ADGP.*APSP.*HEAD\s+OFFICE.*MANGALAGIRI/i
   },
   {
-    id: 'stamp_3',
-    name: 'Inspector General of Police APSP Bns, Amaravathi',
-    keywords: ['INSPECTOR GENERAL', 'POLICE', 'APSP', 'BNS', 'AMARAVATHI'],
-    pattern: /INSPECTOR\s+GENERAL.*POLICE.*APSP.*BNS.*AMARAVATHI/i
-  },
-  {
-    id: 'stamp_4',
-    name: 'Dy. Inspector General of Police-IV APSP Battalions, Mangalagiri',
-    keywords: ['DY', 'INSPECTOR GENERAL', 'POLICE', 'APSP', 'BATTALIONS', 'MANGALAGIRI'],
-    pattern: /DY.*INSPECTOR\s+GENERAL.*POLICE.*APSP.*BATTALIONS.*MANGALAGIRI/i
-  },
-  {
     id: 'stamp_5',
-    name: 'Sd/- B. Sreenivasulu, IPS., Addl. Commissioner of Police, Vijayawada City',
-    keywords: ['SD', 'SREENIVASULU', 'IPS', 'COMMISSIONER', 'POLICE', 'VIJAYAWADA'],
-    pattern: /SD.*SREENIVASULU.*IPS.*COMMISSIONER.*POLICE.*VIJAYAWADA/i
-  },
-  {
-    id: 'stamp_6',
-    name: 'Dr. SHANKHABRATA BAGCHI IPS., Addl. Director General of Police, APSP Battalions',
-    keywords: ['SHANKHABRATA', 'BAGCHI', 'IPS', 'DIRECTOR GENERAL', 'POLICE', 'APSP', 'BATTALIONS'],
-    pattern: /SHANKHABRATA.*BAGCHI.*IPS.*DIRECTOR\s+GENERAL.*POLICE.*APSP.*BATTALIONS/i
+    name: 'Inspector General of Police APSP Bns, Amaravathi',
+    keywords: ['FOR', 'INSPECTOR GENERAL', 'POLICE', 'APSP', 'BNS', 'AMARAVATHI'],
+    pattern: /FOR.*INSPECTOR\s+GENERAL.*POLICE.*APSP.*BNS.*AMARAVATHI/i
   }
 ];
 
@@ -168,11 +162,10 @@ class StampSignatureService {
 
 OFFICIAL STAMP TYPES TO DETECT:
 1. "OFFICER COMMANDING 14th BN A.P.S.P. ANANTHAPURAMU"
-2. "STATE OFFICER TO ADGP APSP HEAD OFFICE MANGALAGIRI"  
-3. "Inspector General of Police APSP Bns, Amaravathi"
-4. "Dy. Inspector General of Police-IV APSP Battalions, Mangalagiri"
-5. "Sd/- B. Sreenivasulu, IPS., Addl. Commissioner of Police, Vijayawada City"
-6. "Dr. SHANKHABRATA BAGCHI IPS., Addl. Director General of Police, APSP Battalions"
+2. "Sd/- B. Sreenivasulu, IPS., Addl. Commissioner of Police, Vijayawada City"
+3. "Dr. SHANKHABRATA BAGCHI IPS., Addl. Director General of Police, APSP Battalions"
+4. "STATE OFFICER TO ADGP APSP HEAD OFFICE MANGALAGIRI"
+5. "Inspector General of Police APSP Bns, Amaravathi"
 
 EXTRACTED TEXT FROM DOCUMENT:
 ${extractedText}
